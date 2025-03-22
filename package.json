@@ -1,0 +1,222 @@
+{
+  "name": "mysql-manager",
+  "displayName": "MySQL Manager",
+  "description": "VSCode extension for managing MySQL connections, editing SQL, and viewing table data",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:mysqlConnectionsView",
+    "onLanguage:sql"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mysql-explorer",
+          "title": "MySQL Explorer",
+          "icon": "resources/database.svg"
+        }
+      ]
+    },
+    "views": {
+      "mysql-explorer": [
+        {
+          "id": "mysqlConnectionsView",
+          "name": "Connections"
+        },
+        {
+          "id": "mysqlResultView",
+          "name": "Query Results"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mysql-manager.addConnection",
+        "title": "Add MySQL Connection",
+        "category": "MySQL",
+        "icon": "$(add)"
+      },
+      {
+        "command": "mysql-manager.editConnection",
+        "title": "Edit Connection",
+        "category": "MySQL",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "mysql-manager.deleteConnection",
+        "title": "Delete Connection",
+        "category": "MySQL",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "mysql-manager.connectToDatabase",
+        "title": "Connect",
+        "category": "MySQL",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "mysql-manager.disconnectFromDatabase",
+        "title": "Disconnect",
+        "category": "MySQL",
+        "icon": "$(debug-disconnect)"
+      },
+      {
+        "command": "mysql-manager.refreshConnection",
+        "title": "Refresh",
+        "category": "MySQL",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "mysql-manager.executeQuery",
+        "title": "Execute Query",
+        "category": "MySQL",
+        "icon": "$(play)"
+      },
+      {
+        "command": "mysql-manager.showTableData",
+        "title": "Show Table Data",
+        "category": "MySQL",
+        "icon": "$(table)"
+      },
+      {
+        "command": "mysql-manager.nextPage",
+        "title": "Next Page",
+        "category": "MySQL",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "mysql-manager.previousPage",
+        "title": "Previous Page",
+        "category": "MySQL",
+        "icon": "$(arrow-left)"
+      },
+      {
+        "command": "mysql-manager.exportToCsv",
+        "title": "Export to CSV",
+        "category": "MySQL",
+        "icon": "$(desktop-download)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "mysql-manager.addConnection",
+          "when": "view == mysqlConnectionsView",
+          "group": "navigation"
+        },
+        {
+          "command": "mysql-manager.refreshConnection",
+          "when": "view == mysqlConnectionsView",
+          "group": "navigation"
+        },
+        {
+          "command": "mysql-manager.exportToCsv",
+          "when": "view == mysqlResultView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "mysql-manager.connectToDatabase",
+          "when": "viewItem == connection-disconnected",
+          "group": "inline"
+        },
+        {
+          "command": "mysql-manager.disconnectFromDatabase",
+          "when": "viewItem == connection-connected",
+          "group": "inline"
+        },
+        {
+          "command": "mysql-manager.editConnection",
+          "when": "viewItem == connection-disconnected",
+          "group": "inline"
+        },
+        {
+          "command": "mysql-manager.deleteConnection",
+          "when": "viewItem == connection-disconnected",
+          "group": "inline"
+        },
+        {
+          "command": "mysql-manager.showTableData",
+          "when": "viewItem == table",
+          "group": "inline"
+        },
+        {
+          "command": "mysql-manager.nextPage",
+          "when": "view == mysqlResultView && viewItem == 'navigation'",
+          "group": "inline"
+        },
+        {
+          "command": "mysql-manager.previousPage",
+          "when": "view == mysqlResultView && viewItem == 'navigation'",
+          "group": "inline"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "mysql-manager.executeQuery",
+          "when": "editorLangId == sql",
+          "group": "navigation"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "sql",
+        "extensions": [
+          ".sql"
+        ],
+        "aliases": [
+          "SQL"
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "MySQL Manager",
+      "properties": {
+        "mysqlManager.connections": {
+          "type": "array",
+          "default": [],
+          "description": "MySQL connections"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.2.2",
+    "@types/mysql2": "github:types/mysql2",
+    "@types/node": "^14.18.63",
+    "@types/vscode": "^1.60.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "eslint": "^7.27.0",
+    "glob": "^7.1.7",
+    "mocha": "^8.4.0",
+    "typescript": "^4.3.2",
+    "vite": "^4.5.9"
+  },
+  "dependencies": {
+    "mysql-manager": "file:",
+    "mysql2": "^3.14.0",
+    "sql-formatter": "^4.0.2"
+  }
+}
