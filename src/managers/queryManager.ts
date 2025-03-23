@@ -43,7 +43,13 @@ export class QueryManager {
         throw new Error('Connection is not established');
       }
 
-      const [rows, fields] = await connection.execute<RowDataPacket[]>(query);
+      // 如果有选定的数据库，先切换到该数据库
+      if (!activeConnection.database) {
+        throw new Error('请先选择数据库');
+      }
+      const [rows, fields] = await connection.query(`USE \`${activeConnection.database}\``).then(async () => {
+        return await connection.execute<RowDataPacket[]>(query);
+      });
       return { fields: fields as FieldPacket[], rows: rows };
     } catch (error) {
       vscode.window.showErrorMessage(`Query execution failed: ${error instanceof Error ? error.message : String(error)}`);

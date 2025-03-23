@@ -10,7 +10,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:mysqlConnectionsView",
     "onLanguage:sql"
   ],
   "main": "./out/extension.js",
@@ -74,16 +73,16 @@
         "icon": "$(refresh)"
       },
       {
+        "command": "mysql-manager.newQuery",
+        "title": "New Query",
+        "category": "MySQL",
+        "icon": "$(new-file)"
+      },
+      {
         "command": "mysql-manager.executeQuery",
         "title": "Execute Query",
         "category": "MySQL",
         "icon": "$(play)"
-      },
-      {
-        "command": "mysql-manager.showTableData",
-        "title": "Show Table Data",
-        "category": "MySQL",
-        "icon": "$(table)"
       },
       {
         "command": "mysql-manager.nextPage",
@@ -144,8 +143,8 @@
           "group": "inline"
         },
         {
-          "command": "mysql-manager.showTableData",
-          "when": "viewItem == table",
+          "command": "mysql-manager.newQuery",
+          "when": "viewItem == connection-connected",
           "group": "inline"
         },
         {
