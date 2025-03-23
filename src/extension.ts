@@ -100,6 +100,11 @@ export function activate(context: vscode.ExtensionContext) {
       resultTreeDataProvider.previousPage();
     }),
     
+    vscode.commands.registerCommand('mysql-manager.showTableStructure', (node) => {
+      // 这个命令将在点击表结构节点时触发，但实际上我们已经在树视图中实现了结构展示
+      // 所以这里只是一个占位，未来可以扩展为打开一个专门的表结构视图
+    }),
+    
     vscode.commands.registerCommand('mysql-manager.exportToCsv', () => {
       const csvContent = resultTreeDataProvider.exportToCsv();
       if (!csvContent) {
