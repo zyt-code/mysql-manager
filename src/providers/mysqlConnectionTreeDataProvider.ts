@@ -79,7 +79,7 @@ export class MySQLConnectionTreeDataProvider implements vscode.TreeDataProvider<
         // First, we need to ensure we're connected to the right database
         const conn = element.connection.connection;
         if (conn) {
-          await conn.execute(`USE \`${element.database}\``);
+          await conn.query(`USE \`${element.database}\``);
         }
         
         const tables = await this.queryManager.getTables(element.connection);
